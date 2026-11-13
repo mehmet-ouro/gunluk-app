@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Günlük</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<main class="page">
+  <header class="day">
+    <div class="strip">
+      <button class="nav" id="prev" type="button" aria-label="Önceki gün">‹</button>
+      <ol class="week" id="week" aria-label="Bu hafta"></ol>
+      <button class="nav" id="next" type="button" aria-label="Sonraki gün">›</button>
+      <button class="backlog-tab" id="backlog-tab" type="button" aria-pressed="false">Backlog <span class="n" id="backlog-count">0</span></button>
+    </div>
+    <div class="title-row">
+      <h1 id="title"><span id="title-date"></span> <span class="weekday" id="title-weekday"></span></h1>
+      <div class="jump">
+        <button class="quiet" id="today" type="button">Bugün</button>
+        <label class="pick">
+          <span>Tarih seç</span>
+          <input type="date" id="date">
+        </label>
+      </div>
+    </div>
+    <p class="progress" id="progress" hidden>
+      <span class="bar"><span class="fill" id="progress-fill"></span></span>
+      <span id="progress-text"></span>
+    </p>
+  </header>
+
+  <nav class="filters" aria-label="Filtreler">
+    <div class="chips" id="projects" role="group" aria-label="Proje"></div>
+    <label class="status-filter">
+      <span class="sr">Durum</span>
+      <select id="status-filter"></select>
+    </label>
+  </nav>
+
+  <form class="add" id="add" autocomplete="off">
+    <label class="sr" for="add-title">Yeni görev</label>
+    <input id="add-title" maxlength="300" placeholder="Bugün ne yapacaksın?">
+    <button type="button" class="add-urgency" id="add-urgency" title="Aciliyet. Kısayol: başlığın başına !! acil, ! yüksek, ~ düşük"><span class="u-flag" aria-hidden="true"></span><span class="u-text">Normal</span></button>
+    <label class="sr" for="add-project">Proje</label>
+    <select id="add-project" class="project-select"></select>
+    <button class="primary" type="submit">Ekle</button>
+  </form>
+  <p class="form-error" id="add-error" hidden></p>
+
+  <section id="body" aria-live="polite">
+    <section class="carry" id="carry" hidden aria-labelledby="carry-toggle">
+      <div class="carry-head">
+        <button type="button" class="carry-toggle" id="carry-toggle" aria-expanded="true" aria-controls="carry-list">
+          <span class="chev" aria-hidden="true">▾</span> Önceki günlerden kalanlar <span class="n" id="carry-count">0</span>
+        </button>
+        <button type="button" class="quiet small" id="carry-all">Hepsini bugüne al</button>
+      </div>
+      <ul class="list carry-list" id="carry-list"></ul>
+    </section>
+    <ul class="list" id="list"></ul>
+    <div class="state" id="state" hidden></div>
+  </section>
+</main>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="panel" id="panel" role="dialog" aria-modal="false" hidden>
+  <div class="p-head">
+    <button type="button" class="p-status" id="p-status" aria-haspopup="menu"></button>
+    <span class="p-head-actions">
+      <button type="button" class="danger-link" id="p-delete">Görevi sil</button>
+      <button type="button" class="act icon" id="p-close" aria-label="Paneli kapat" title="Kapat (Esc)">✕</button>
+    </span>
+  </div>
+  <label class="sr" for="p-title">Başlık</label>
+  <textarea id="p-title" class="p-title" rows="1" maxlength="300"></textarea>
+
+  <div class="p-props">
+    <label class="prop" for="p-project"><span class="prop-name">Proje</span></label>
+    <div class="prop-value"><select id="p-project" class="project-select"></select></div>
+
+    <label class="prop" for="p-day"><span class="prop-name">Gün</span></label>
+    <div class="prop-value">
+      <input type="date" id="p-day" aria-label="Tarih">
+      <button type="button" class="chip small-chip" id="p-undated" aria-pressed="false">Tarihsiz</button>
+      <button type="button" class="quiet small" id="p-tomorrow">Yarına at</button>
+    </div>
+
+    <span class="prop"><span class="prop-name">Aciliyet</span></span>
+    <div class="prop-value"><div class="u-picks" id="p-urgency" role="group" aria-label="Aciliyet"></div></div>
+
+    <span class="prop"><span class="prop-name">Etiketler</span></span>
+    <div class="prop-value"><div class="tags-edit" id="p-tags"></div></div>
+  </div>
+
+  <section class="p-sec">
+    <div class="p-sec-head">
+      <h2>Alt görevler <span class="p-count" id="p-sub-count"></span></h2>
+    </div>
+    <ul class="subs" id="p-subs"></ul>
+    <form id="p-sub-add" class="sub-add" autocomplete="off">
+      <label class="sr" for="p-sub-input">Alt görev ekle</label>
+      <span class="plus" aria-hidden="true">+</span>
+      <input id="p-sub-input" maxlength="300" placeholder="Alt görev ekle, Enter">
+    </form>
+  </section>
+
+  <div class="p-doc-wrap" id="p-doc-wrap">
+    <div class="p-doc" id="p-doc"></div>
+  </div>
+</aside>
+
+<div class="menu" id="status-menu" role="menu" hidden></div>
+<div class="toast" id="toast" role="status" hidden><span id="toast-text"></span><button type="button" id="toast-undo">Geri al</button></div>
+
+<script type="module" src="/app.js"></script>
+</body>
+</html>

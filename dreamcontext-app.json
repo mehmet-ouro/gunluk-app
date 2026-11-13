@@ -1,0 +1,87 @@
+{
+  "slug": "gunluk",
+  "name": "Günlük",
+  "icon": "icon.png",
+  "backend": {
+    "command": "node server.mjs",
+    "health": "/health"
+  },
+  "agent": {
+    "own": true
+  },
+  "actions": [
+    {
+      "id": "day-tasks",
+      "title": "Read one day's to-do list, or the undated backlog",
+      "method": "GET",
+      "path": "/api/day",
+      "does": "The user's to-do list for one day, or the undated backlog (date=backlog), sorted by urgency (urgent, high, normal, low) then the user's own order: each task's urgency, project, status, tags, Markdown description and subtasks (each with its status). Read only.",
+      "output": "{date, backlog: count of undated tasks, tasks: [{id, title, urgency, project, status, tags: [string], order, description, subtasks: [{id, title, status}]}], projects: [{name, color}], tags: [string]}",
+      "params": {
+        "date": {
+          "type": "string",
+          "desc": "YYYY-MM-DD, or backlog for undated tasks; today when left out"
+        }
+      },
+      "topics": [
+        "todo",
+        "to-do",
+        "görev",
+        "günlük",
+        "bugün",
+        "yapılacak",
+        "status",
+        "alt görev",
+        "subtask",
+        "açıklama",
+        "etiket",
+        "tag",
+        "backlog",
+        "tarihsiz",
+        "aciliyet",
+        "urgency",
+        "öncelik"
+      ]
+    },
+    {
+      "id": "projects",
+      "title": "List the projects in the to-do list",
+      "method": "GET",
+      "path": "/api/projects",
+      "does": "Every project in the Günlük list, with how many tasks it has and how many are not done. Read only.",
+      "output": "[{name, color, tasks, open}]",
+      "topics": [
+        "proje",
+        "project",
+        "görev",
+        "todo"
+      ]
+    },
+    {
+      "id": "carryover",
+      "title": "Read unfinished tasks left from earlier days",
+      "method": "GET",
+      "path": "/api/carryover",
+      "does": "Every task dated before today that is not done (waiting included, backlog excluded), urgency first, then oldest day. Read only; nothing is moved.",
+      "output": "{today, tasks: [{id, day, title, urgency, project, status, tags, subtasks}]}",
+      "params": {
+        "today": {
+          "type": "date",
+          "desc": "YYYY-MM-DD; this Mac's today when left out"
+        }
+      },
+      "topics": [
+        "kalan",
+        "önceki gün",
+        "bitmemiş",
+        "carryover",
+        "overdue",
+        "gecikmiş",
+        "todo",
+        "aciliyet",
+        "urgency",
+        "öncelik"
+      ]
+    }
+  ]
+}
